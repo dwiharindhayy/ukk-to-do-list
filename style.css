@@ -1,0 +1,181 @@
+/* ===== WARNA mode terang. Semua warna disimpan sebagai variabel agar mode gelap tinggal mengganti nilainya ===== */
+:root{--page:radial-gradient(circle at 15% 0,#fff 0,transparent 45%),radial-gradient(circle at 90% 20%,#c9dcee 0,transparent 45%),linear-gradient(#e6eff8,#f6f9fc);--side:#b6cde3;--surface:#f5f5f6;--ink:#1c2a3b;--muted:#5f7185;--line:#a9bccf;--blue:#b6cde3;--navy:#2c3e5c;--brand:#2c3e5c;--brand-ink:#fff;--late:#c0392b;--late-bg:#fbe3df;--r:20px;color-scheme:light;box-sizing:border-box;padding-bottom:env(safe-area-inset-bottom,0px)}
+/* ===== WARNA mode gelap: aktif saat tombol tema memasang data-theme="dark" di tag html ===== */
+:root[data-theme="dark"]{--page:radial-gradient(circle at 15% 0,#223a5e 0,transparent 45%),radial-gradient(circle at 90% 20%,#1a2d4a 0,transparent 45%),#0f1a2b;--side:#1b2b45;--surface:#1c2b44;--ink:#e8f0f9;--muted:#9db0c5;--line:#3a4f6c;--blue:#2f4a70;--navy:#0b1422;--brand:#b6cde3;--brand-ink:#12233a;--late:#ff8a7a;--late-bg:#4a2320;color-scheme:dark}
+/* Reset dasar dan font */
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--page);background-attachment:fixed;color:var(--ink);font:400 14px/1.5 "Lexend",system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+/* ===== LAYOUT: sidebar kiri + konten utama ===== */
+.app{display:grid;grid-template-columns:210px 1fr;min-height:100vh}
+.side{position:sticky;top:0;height:100vh;background:var(--side);border-radius:0 var(--r) var(--r) 0;padding:calc(28px + env(safe-area-inset-top,0px)) 16px 24px;display:flex;flex-direction:column;gap:6px}
+.brand{font-weight:600;font-size:20px;letter-spacing:.08em;margin-bottom:28px;padding-left:10px}
+.nav{display:flex;align-items:center;gap:10px;border:0;background:none;border-radius:12px;padding:10px 12px;cursor:pointer;text-align:left;color:var(--ink)}
+.nav[aria-current="page"]{background:var(--surface);box-shadow:0 2px 8px rgba(30,60,100,.12)}
+.nav.theme{margin-top:auto;width:44px;justify-content:center;background:var(--surface);font-size:18px;padding:8px}
+.main{padding:28px 28px 64px;max-width:1240px;width:100%;margin:0 auto}
+/* ===== BAGIAN ATAS: judul, tanggal, tombol Add task ===== */
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:22px}
+h1{margin:0;font-size:26px;font-weight:600;letter-spacing:.03em;text-transform:uppercase}
+.top small{display:block;color:var(--muted);font-size:12px}
+/* Tombol */
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 14px;cursor:pointer;transition:transform .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:var(--brand);color:var(--brand-ink);border-color:var(--brand);font-weight:500}
+.btn.danger{color:var(--late)}
+/* ===== KARTU STATISTIK dan PROGRESS BAR ===== */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.stat b{display:block;font-size:26px;font-weight:600;line-height:1.1}.stat span{font-size:12px;color:var(--muted)}
+.stat.late{background:var(--navy);border-color:var(--navy);color:#fff}.stat.late span{color:#c9d6e6}
+.prog{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;margin-bottom:16px}
+.prog-top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
+.bar{height:10px;border-radius:99px;background:var(--blue);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:99px;background:var(--navy);transition:width .5s}
+/* ===== SEARCH dan FILTER ===== */
+.tools{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.search{grid-column:1/-1;position:relative}.search input{padding:11px 40px 11px 16px;border-radius:99px}
+.search button{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:none;cursor:pointer;font-size:20px;color:var(--muted);padding:4px 8px}
+input,select,textarea{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px;width:100%}
+/* ===== KARTU TUGAS: biru = biasa, navy = Overdue, abu-abu dicoret = Done ===== */
+.task{background:var(--blue);border-radius:var(--r);padding:16px;margin-bottom:10px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start}
+.task.overdue{background:var(--navy);color:#fff}
+.task.done{background:var(--surface);border:1px solid var(--line);opacity:.7}.task.done h3{text-decoration:line-through}
+.task h3{margin:0 0 2px;font-size:16px;font-weight:500}.task p{margin:0 0 8px;font-size:13px;opacity:.8}
+.chk{width:20px;height:20px;margin-top:3px;accent-color:var(--navy)}
+.meta{display:flex;flex-wrap:wrap;gap:6px;font-size:12px}
+.tag{border-radius:99px;padding:1px 10px;background:rgba(255,255,255,.55);color:#1c2a3b}
+.overdue .tag{background:rgba(255,255,255,.14);color:#fff}
+.tag.late{background:#ff6b5a;color:#fff}.tag.s-done{background:#2e7d57;color:#fff}.tag.s-prog{background:#a87400;color:#fff}
+.acts{display:flex;gap:6px}.acts .btn{padding:4px 11px;font-size:13px;color:var(--ink)}.acts .btn.danger{color:var(--late)}
+/* Tampilan kosong "No tasks found" */
+.empty{text-align:center;padding:48px 16px;color:var(--muted);border:1px dashed var(--line);border-radius:var(--r)}
+.empty strong{display:block;font-size:18px;color:var(--ink);font-weight:500}
+/* ===== KALENDER di kanan daftar tugas ===== */
+.split{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start}
+#viewCal{position:sticky;top:16px}
+.calwrap{display:grid;gap:14px}
+.cal,.dayp{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.cal-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.cal-head h2,.dayp h2{margin:0;font-size:16px;font-weight:600}
+.cal-head .btn{padding:4px 12px}
+.dow,.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.dow span{font-size:12px;color:var(--muted);padding-bottom:4px}
+/* Kotak tanggal. .past = tanggal lewat (abu-abu), .today = hari ini, .sel = terpilih */
+.cd{position:relative;aspect-ratio:1;border:0;background:none;border-radius:12px;cursor:pointer;min-height:38px}
+.cd:hover{background:var(--blue)}.cd.today{background:var(--blue);font-weight:700}
+.cd.sel{outline:2px solid var(--navy);outline-offset:-2px}
+.dot{position:absolute;bottom:5px;left:50%;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:var(--navy)}.dot.late{background:#e5484d}
+.dayp small{color:var(--muted);display:block;margin-bottom:10px}
+.ev{background:var(--blue);border-radius:14px;padding:10px 12px;margin-bottom:8px;display:grid}
+.ev.late{background:var(--navy);color:#fff}.ev span{font-size:12px;opacity:.8}.ev.none{background:none;border:1px dashed var(--line);opacity:.8}
+/* ===== FORM ADD/EDIT (dialog pop-up) dan kotak pesan error ===== */
+dialog{border:1px solid var(--line);border-radius:var(--r);padding:0;width:min(520px,94vw);background:var(--surface);color:var(--ink)}
+dialog::backdrop{background:rgba(10,25,45,.55)}
+form{padding:20px;display:grid;gap:12px}form h2{margin:0;font-size:20px;font-weight:600}
+label{display:grid;gap:4px;font-size:13px;font-weight:500}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.errs{background:var(--late-bg);color:var(--late);border-radius:12px;padding:8px 12px;font-size:13px;display:none}
+.errs.on{display:block}.errs div+div{margin-top:2px}
+.foot{display:flex;justify-content:flex-end;gap:8px;margin-top:4px}
+/* Notifikasi kecil di bawah layar */
+.toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--navy);color:#fff;padding:10px 18px;border-radius:99px;opacity:0;pointer-events:none;transition:.25s;z-index:50}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+/* ===== TAMPILAN HP: sidebar pindah ke bawah, kolom jadi satu ===== */
+@media(max-width:760px){
+ .app{display:block}
+ .side{position:fixed;inset:auto 0 0 0;height:auto;flex-direction:row;align-items:center;justify-content:center;border-radius:var(--r) var(--r) 0 0;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));z-index:20}
+ .brand{display:none}.nav.theme{margin:0 0 0 8px}
+ .main{padding:calc(20px + env(safe-area-inset-top,0px)) 14px 110px}
+ .stats{grid-template-columns:repeat(2,1fr)}.tools{grid-template-columns:1fr 1fr}.calwrap{grid-template-columns:1fr}
+ .row3{grid-template-columns:1fr}.task{grid-template-columns:auto 1fr}.acts{grid-column:2}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media(max-width:1000px){.split{grid-template-columns:1fr}#viewCal{position:static}}
+.top{align-items:center}.top h1{text-transform:none;font-weight:500;font-size:24px;letter-spacing:0}
+.topr{display:flex;gap:10px;align-items:center}
+.chip{display:inline-flex;gap:6px;align-items:center;background:var(--surface);border-radius:12px;padding:6px 12px;font-size:13px;box-shadow:0 6px 16px -10px rgba(60,90,160,.4)}
+/* ===== KARTU SAPAAN, MASKOT, NOTIFIKASI, dan KARTU STATISTIK BERIKON ===== */
+.hero-row{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;margin:44px 0 22px;align-items:start}
+.hero{position:relative;background:var(--surface);border-radius:26px;padding:34px 40px;min-height:230px;box-shadow:0 14px 30px -16px rgba(60,90,160,.35)}
+.hero h2{font-size:40px;font-weight:400;margin:0 0 6px;line-height:1.15}.hero p{color:var(--muted);margin:0 0 20px;max-width:330px}
+.qa-grid{display:grid;grid-template-columns:repeat(2,max-content);gap:12px 34px}
+.qa{display:flex;align-items:center;gap:10px;border:0;background:none;cursor:pointer;padding:0;color:var(--ink);font-size:13px}
+.qa:hover{text-decoration:underline}
+.qa i{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:7px;font-style:normal;font-size:12px;border:1.5px solid currentColor}
+.qa i.b{color:#4a6fb0}.qa i.y{color:#d9a400}.qa i.r{color:#d9364b}
+.bear{position:absolute;right:28px;bottom:0;width:250px;height:250px}
+.notes h3{margin:0 0 10px;font-weight:500;font-size:16px}
+.note{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:0;background:var(--surface);border-radius:16px;padding:12px 14px;margin-bottom:10px;cursor:pointer;color:var(--ink);box-shadow:0 8px 20px -12px rgba(60,90,160,.35)}
+.note span{flex:1;font-size:13px;line-height:1.3}.note small{display:block;color:var(--muted);font-size:11px}
+.ni{flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:#fff;font-weight:700;font-style:normal}
+.ni.warn{background:#f0b400}.ni.late{background:#e8465a}.ni.info{background:#5b7fc9}
+.stat{border:0;border-radius:22px;padding:18px;box-shadow:0 14px 24px -16px rgba(60,90,160,.4)}
+.stat .ic{width:36px;height:36px;display:block;margin-bottom:12px}
+.stat span{display:block;font-size:13px;color:var(--muted);line-height:1.35}
+.stat b{display:block;font-size:26px;font-weight:500;margin-top:8px}
+.s1 .ic{color:#4a6fb0}.s2 .ic{color:#e0a800}.s3 .ic{color:#3ba55c}.s4 .ic{color:#e8465a}
+.stat.late{background:var(--surface);color:var(--ink)}.stat.late span{color:var(--muted)}.stat.late b{color:var(--late)}
+.sec{font-size:18px;font-weight:500;margin:26px 0 12px;scroll-margin-top:16px}
+@media(max-width:1000px){.hero-row{grid-template-columns:1fr}.bear{width:190px;height:190px}}
+@media(max-width:560px){.bear{display:none}.hero{padding:26px}.hero h2{font-size:32px}.qa-grid{grid-template-columns:1fr}}
+.cd.past{color:var(--muted);opacity:.45;cursor:default}.cd.past:hover{background:none}.cd.past.sel{opacity:.8}
+.late-toggle{grid-column:1/-1;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:400;color:var(--muted);cursor:pointer}.late-toggle input{width:auto;accent-color:var(--navy)}
+/* ===== REVISI: tombol Add task tunggal di kartu sapaan ===== */
+.hero .add-main{display:inline-block;margin:0 0 20px;padding:10px 22px;border-radius:14px;font-size:14px}
+/* ===== REVISI: tugas Done terkunci (Edit & centang nonaktif) ===== */
+.acts .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.chk:disabled{cursor:not-allowed;opacity:.8}
+/* ===== REVISI: tombol buka-tutup My Tasks ===== */
+.sec-head{display:flex;align-items:center;gap:12px;margin:26px 0 12px}
+.sec-head .sec{margin:0}
+.toggle{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;padding:5px 14px;font-size:13px;cursor:pointer}
+.toggle:hover{background:var(--blue)}
+.chev{transition:transform .2s}
+.toggle[aria-expanded="false"] .chev{transform:rotate(-90deg)}
+.split.closed{display:none}
+
+/* ===== REVISI: tombol Add task BESAR supaya langsung terlihat ===== */
+.hero .add-main{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;max-width:330px;margin:0 0 24px;padding:17px 24px;border-radius:18px;font-size:18px;font-weight:600;letter-spacing:.02em;box-shadow:0 14px 26px -12px rgba(44,62,92,.6)}
+.hero .add-main:hover{transform:translateY(-2px);box-shadow:0 18px 30px -12px rgba(44,62,92,.7)}
+@media(max-width:560px){.hero .add-main{max-width:none}}
+/* ===== REVISI: sidebar bisa ditutup (jadi strip ikon) ===== */
+.side-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:28px}
+.side-top .brand{margin-bottom:0}
+.side-toggle{flex:none;display:grid;place-items:center;width:34px;height:34px;border:0;border-radius:10px;background:var(--surface);color:var(--ink);cursor:pointer;box-shadow:0 2px 8px rgba(30,60,100,.12)}
+.side-toggle:hover{background:var(--blue)}
+.side-chev{transition:transform .2s}
+.app,.side{transition:grid-template-columns .25s}
+.nav-ic{font-size:18px;line-height:1}
+@media(min-width:761px){
+ .app.side-closed{grid-template-columns:72px 1fr}
+ .side-closed .side{padding-left:12px;padding-right:12px;align-items:center}
+ .side-closed .side-top{flex-direction:column;align-items:center;margin-bottom:20px}
+ .side-closed .brand,.side-closed .nav-txt{display:none}
+ .side-closed .side-chev{transform:rotate(180deg)}
+ .side-closed .nav{justify-content:center;padding:10px}
+}
+@media(max-width:760px){.side-top{display:none}.nav-txt{display:inline}}
+
+/* ===== REVISI: tugas yang sudah selesai (Done) berwarna HIJAU ===== */
+.task.done{background:#d3efdf;border:1px solid #2e7d57;color:#14432b;opacity:1}
+.task.done .tag{background:rgba(255,255,255,.65);color:#14432b}
+.task.done .tag.s-done{background:#2e7d57;color:#fff}
+.task.done .acts .btn{color:#14432b}.task.done .acts .btn.danger{color:var(--late)}
+.ev.done{background:#d3efdf;color:#14432b}
+:root[data-theme="dark"] .task.done{background:#1d4a35;border-color:#3ba55c;color:#e3f6ea}
+:root[data-theme="dark"] .task.done .tag{background:rgba(255,255,255,.14);color:#e3f6ea}
+:root[data-theme="dark"] .task.done .tag.s-done{background:#3ba55c;color:#fff}
+:root[data-theme="dark"] .task.done .acts .btn{color:#e3f6ea}
+:root[data-theme="dark"] .task.done .acts .btn.danger{color:var(--late)}
+:root[data-theme="dark"] .ev.done{background:#1d4a35;color:#e3f6ea}
+
+/*footer */
+.foot-site{
+  margin-top:32px;
+  padding:16px 0 calc(16px + env(safe-area-inset-bottom, 0px));
+  text-align:center;
+  font-size:13px;
+  color:#8a94a6;
+  border-top:1px solid rgba(128,128,128,.2);
+}

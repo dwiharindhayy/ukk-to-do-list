@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TASKLY</title>
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <!-- SIDEBAR kiri: logo, menu, tombol mode gelap/terang -->
+  <aside class="side">
+    <div class="side-top">
+      <div class="brand">TASKLY</div>
+      <!-- Tombol tutup/buka sidebar (diatur ui.js) -->
+      <button class="side-toggle" id="sideToggle" type="button" aria-expanded="true" aria-label="Collapse sidebar" title="Collapse sidebar">
+        <svg class="side-chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+      </button>
+    </div>
+    <div class="nav" aria-current="page" title="My Tasks"><span class="nav-ic">&#9745;</span><span class="nav-txt">My Tasks</span></div>
+    <button class="nav theme" id="themeBtn" type="button" aria-label="Toggle dark mode">&#127769;</button>
+  </aside>
+  <main class="main">
+    <!-- BAGIAN ATAS: judul Dashboard dan tanggal hari ini -->
+    <header class="top"><h1>Dashboard</h1><div class="topr"><span class="chip">&#128197; <span id="today"></span></span></div></header>
+    <!-- KARTU SAPAAN (diisi hero.js) + NOTIFIKASI otomatis di kanan -->
+    <section class="hero-row">
+      <div class="hero"><div><h2 id="greet">Hi there!</h2><p id="heroSub"></p>
+        <!-- SATU-SATUNYA tombol Add task (aksinya diatur form.js) -->
+        <button class="btn primary add-main" id="addBtn" type="button">&#65291; Add task</button>
+        <div class="qa-grid"><button class="qa" data-go="cal"><i class="b">&#8594;</i>Check Calendar</button><button class="qa" data-go="overdue"><i class="r">&#8594;</i>See Overdue</button><button class="qa" data-go="tasks"><i class="b">&#8594;</i>Manage Tasks</button></div></div>
+        <svg class="bear" viewBox="0 0 200 200" aria-hidden="true" fill="none" stroke="#2c3e5c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="100" cy="150" rx="52" ry="40" fill="#fff"/><ellipse cx="66" cy="186" rx="24" ry="11" fill="#fff"/><ellipse cx="134" cy="186" rx="24" ry="11" fill="#fff"/>
+<circle cx="52" cy="46" r="22" fill="#fff"/><circle cx="52" cy="46" r="10" fill="#ffcf4d" stroke="none"/><circle cx="148" cy="46" r="22" fill="#fff"/><circle cx="148" cy="46" r="10" fill="#ffcf4d" stroke="none"/>
+<ellipse cx="100" cy="88" rx="64" ry="52" fill="#fff"/>
+<path d="M70 84q8 8 16 0M114 84q8 8 16 0"/><ellipse cx="64" cy="100" rx="9" ry="6" fill="#ff8a9a" stroke="none"/><ellipse cx="136" cy="100" rx="9" ry="6" fill="#ff8a9a" stroke="none"/>
+<ellipse cx="100" cy="96" rx="9" ry="6" fill="#e7b99a" stroke-width="3"/><path d="M94 106q6 5 12 0" stroke-width="3"/>
+<rect x="138" y="122" width="38" height="34" rx="7" fill="#4a6fb0"/><path d="M176 130h6a8 8 0 0 1 0 16h-6"/><path d="M150 112q-4-6 0-12M162 112q-4-6 0-12" stroke-width="3"/></svg>
+      </div>
+      <aside class="notes"><h3>&#128276; Notifications</h3><div id="notes"></div></aside>
+    </section>
+    <!-- 4 KARTU STATISTIK (diisi renderStats di tasks.js) -->
+    <section class="stats" id="stats" aria-label="Dashboard statistics"></section>
+    <!-- BAGIAN MY TASKS: judul + tombol buka/tutup (diatur ui.js) -->
+    <div class="sec-head">
+      <h2 class="sec" id="listTop">My Tasks</h2>
+      <button class="toggle" id="toggleTasks" type="button" aria-expanded="true" aria-controls="tasksBody">
+        <span id="toggleTxt">Hide</span>
+        <svg class="chev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+    </div>
+    <!-- ISI My Tasks (progress, search, filter, daftar tugas, kalender). Class "closed" = tertutup -->
+    <div class="split" id="tasksBody">
+    <div id="viewTasks">
+      <div class="prog"><div class="prog-top"><span id="progTxt"></span><span id="progPct"></span></div><div class="bar"><i id="progBar"></i></div></div>
+      <!-- SEARCH + FILTER status/kategori/prioritas + Reset + checkbox overdue only -->
+      <section class="tools">
+    <div class="search">
+      <input id="q" type="search" placeholder="Search your tasks..." autocomplete="off" aria-label="Search tasks">
+      <button id="clearQ" type="button" aria-label="Clear search" hidden>&times;</button>
+    </div>
+    <select id="fStatus" aria-label="Filter by status">
+      <option value="">All statuses</option><option>To Do</option><option>In Progress</option><option>Done</option>
+    </select>
+    <select id="fCat" aria-label="Filter by category"><option value="">All categories</option></select>
+    <select id="fPri" aria-label="Filter by priority">
+      <option value="">All priorities</option><option>High</option><option>Medium</option><option>Low</option>
+    </select>
+    <button class="btn" id="reset" type="button">Reset filters</button>
+    <label class="late-toggle"><input type="checkbox" id="fLate"> Show only overdue tasks (past deadline, not done)</label>
+  </section>
+      <!-- DAFTAR TUGAS: kartu-kartunya dibuat oleh T.render() di tasks.js -->
+      <section id="list" aria-live="polite"></section>
+    </div>
+    <!-- KALENDER (calendar.js) dan panel tugas pada tanggal terpilih -->
+    <div id="viewCal">
+      <div class="calwrap">
+        <section class="cal">
+          <div class="cal-head"><button class="btn" id="calPrev" aria-label="Previous month">&#8249;</button><h2 id="calTitle"></h2><button class="btn" id="calNext" aria-label="Next month">&#8250;</button></div>
+          <div class="dow"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+          <div class="grid" id="calGrid"></div>
+          <button class="btn" id="calToday" style="margin-top:10px">Today</button>
+        </section>
+        <section class="dayp"><h2>Tasks due</h2><small id="dayTitle"></small><div id="dayList"></div></section>
+      </div>
+    </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="foot-site">
+      Dwi Harinda Lismiana &middot; UKK 2026
+    </footer>
+  </main>
+</div>
+<!-- NOTIFIKASI kecil (toast) -->
+<div id="toast" class="toast" role="status"></div>
+<!-- FORM ADD/EDIT TASK (dipakai bersama). Tanggal type="date", jam type="time" -->
+<dialog id="dlg">
+  <form id="form" novalidate>
+    <h2 id="dlgTitle">Add task</h2>
+    <!-- Tempat pesan error validasi muncul (diisi validation.js) -->
+    <div class="errs" id="errs" role="alert"></div>
+    <label>Task name<input id="title" maxlength="80" required></label>
+    <label>Description<textarea id="desc" rows="2" maxlength="300"></textarea></label>
+    <div class="row">
+      <label>Category<input id="cat" list="cats" maxlength="30" placeholder="e.g. Work"></label>
+      <datalist id="cats"></datalist>
+      <label>Status<select id="status"><option>To Do</option><option>In Progress</option><option>Done</option></select></label>
+    </div>
+    <label>Priority<select id="pri"><option>High</option><option selected>Medium</option><option>Low</option></select></label>
+    <!-- Start Date, Deadline Date, Deadline Time -->
+    <div class="row3">
+      <label>Start date<input type="date" id="sd"></label>
+      <label>Deadline date<input type="date" id="dd"></label>
+      <label>Deadline time<input type="time" id="dt"></label>
+    </div>
+    <div class="foot">
+      <button type="button" class="btn" id="cancel">Cancel</button>
+      <button type="submit" class="btn primary" id="save">Save task</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- URUTAN FILE JS PENTING: data -> validasi -> ui -> tasks -> kalender -> hero -> form -> main (terakhir) -->
+<script src="js/data.js"></script>
+<script src="js/validation.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/tasks.js"></script>
+<script src="js/calendar.js"></script>
+<script src="js/hero.js"></script>
+<script src="js/form.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
